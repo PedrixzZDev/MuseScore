@@ -36,6 +36,7 @@ muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::i
     mu::engraving::Err err = importGTP(score, &file, iocContext(), guitarProConfiguration()->linkedTabStaffCreated(),
                                        guitarProConfiguration()->experimental());
 
+    score->cmdResetToDefaultLayout();
     switch (guitarProConfiguration()->deviceForSvgExport()) {
     case 0:
         score->loadStyle(u":/engraving/styles/svg-import-style-phone.mss");

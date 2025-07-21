@@ -3118,13 +3118,13 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::m
                 }
 
                 static const std::vector<StaffTypes> types {
-                    StaffTypes::TAB_4SIMPLE,
-                    StaffTypes::TAB_5SIMPLE,
-                    StaffTypes::TAB_6SIMPLE,
-                    StaffTypes::TAB_7SIMPLE,
-                    StaffTypes::TAB_8SIMPLE,
-                    StaffTypes::TAB_9SIMPLE,
-                    StaffTypes::TAB_10SIMPLE,
+                    StaffTypes::TAB_4COMMON,
+                    StaffTypes::TAB_5COMMON,
+                    StaffTypes::TAB_6COMMON,
+                    StaffTypes::TAB_7COMMON,
+                    StaffTypes::TAB_8COMMON,
+                    StaffTypes::TAB_9COMMON,
+                    StaffTypes::TAB_10COMMON,
                 };
 
                 size_t index = (lines >= 4 && lines <= 10) ? lines - 4 : 2;

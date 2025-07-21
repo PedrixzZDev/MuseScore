@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.00">
   <Style>
-    <Spatium>4.5</Spatium>
+    <Spatium>4</Spatium>
     <pageOddTopMargin>1.0</pageOddTopMargin>
-    <pageOddLeftMargin>1.0</pageOddLeftMargin>
+    <pageOddLeftMargin>0</pageOddLeftMargin>
     <pageHeight>20</pageHeight>
     <pageWidth>15</pageWidth>
-    <pagePrintableWidth>13</pagePrintableWidth>
+    <pagePrintableWidth>15</pagePrintableWidth>
     
     <rehearsalMarkFrameType>0</rehearsalMarkFrameType>
     <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
