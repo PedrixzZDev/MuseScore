@@ -1266,8 +1266,8 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             Note* harmonicNote = Factory::createNote(note->chord());
 
             harmonicNote->setHarmonic(true);
-            harmonicNote->setPlay(true);
-            note->setPlay(false);
+            harmonicNote->setPlay(false);
+            note->setPlay(true);
             /// @note option to show or not additional harmonic fret in "<>" to be implemented
             ///harmonicNote->setDisplayFret(Note::DisplayFretOption::ArtificialHarmonic);
             ///note->setDisplayFret(Note::DisplayFretOption::Hide);
@@ -1312,6 +1312,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
             harmonicNote->setPitch(std::clamp(pitch, 0, 127));
             harmonicNote->setTpcFromPitch(Prefer::SHARPS);
+            note->setHarmonicPitchOffset(harmonicNote->pitch() - note->pitch());
             note->chord()->add(harmonicNote);
 
             switch (type) {
@@ -1327,10 +1328,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             case HARMONIC_MARK_SEMI:
                 result.harmonicSemi = true;
                 break;
-            }
-
-            if (!bendData.empty()) {
-                bendParent = harmonicNote;
             }
         }
     }
