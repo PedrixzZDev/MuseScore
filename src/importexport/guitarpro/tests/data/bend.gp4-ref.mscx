@@ -116,14 +116,14 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>P_P</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>Q_Q</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>R_R</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>6</fret>
@@ -153,7 +153,10 @@
             </Chord>
           <Chord>
             <eid>T_T</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>U_U</eid>
               <pitch>67</pitch>
@@ -173,14 +176,14 @@
             <durationType>half</durationType>
             <Note>
               <eid>W_W</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>X_X</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>Y_Y</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>6</fret>
@@ -215,7 +218,10 @@
         <voice>
           <Chord>
             <eid>b_b</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>c_c</eid>
               <pitch>57</pitch>
@@ -234,6 +240,7 @@
           <Chord>
             <eid>d_d</eid>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -291,7 +298,10 @@
             </Chord>
           <Chord>
             <eid>j_j</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>k_k</eid>
               <pitch>62</pitch>
@@ -344,14 +354,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>q_q</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>r_r</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>s_s</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -391,7 +401,10 @@
             </Chord>
           <Chord>
             <eid>w_w</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>x_x</eid>
               <pitch>53</pitch>
@@ -414,14 +427,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>z_z</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>0_0</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>1_1</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>2</fret>

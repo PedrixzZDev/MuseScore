@@ -67,7 +67,10 @@
             </Dynamic>
           <Chord>
             <eid>H_H</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>I_I</eid>
               <Accidental>

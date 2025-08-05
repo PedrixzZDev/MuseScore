@@ -74,6 +74,8 @@
             </Tempo>
           <Chord>
             <eid>I_I</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <Note>
               <eid>J_J</eid>
