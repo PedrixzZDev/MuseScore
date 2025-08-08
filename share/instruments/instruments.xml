@@ -9889,10 +9889,10 @@
             </Instrument>
             <Instrument id="bukhaylo">
                   <family>drums</family>
-                  <trackName>Bukhaylo</trackName>
-                  <longName>Bukhaylo</longName>
+                  <trackName>Bukhaĭlo</trackName>
+                  <longName>Bukhaĭlo</longName>
                   <shortName>Bkh.</shortName>
-                  <description>Ukrainian bass drum with a cymbal mounted on top.</description>
+                  <description>Ukrainian bass drum with a cymbal on top, which is struck with a metal beater.</description>
                   <musicXMLid>drum.bass-drum</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
@@ -9907,18 +9907,18 @@
                         <stem>2</stem>
                         <shortcut>A</shortcut>
                   </Drum>
-                  <Drum pitch="57"> <!-- Crash Cymbal 2 -->
-                        <head>cross</head>
-                        <line>-2</line>
+                  <Drum pitch="51"> <!-- Ride Cymbal 1 -->
+                        <head>diamond</head>
+                        <line>0</line>
                         <voice>0</voice>
-                        <name>Bukhaĭlo (cymbal)</name>
+                        <name>Bukhaĭlo (cymbal ride)</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
                   <Channel>
-                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard Kit-->
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="48"/> <!--Orchestra Kit-->
+                        <program value="0"/> <!--Standard Kit-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
