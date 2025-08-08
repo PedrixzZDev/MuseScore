@@ -107,7 +107,7 @@ jobs:
 
           if [ "$SENTRY_PROJECT" == "mu4" ]; then
             DO_UPLOAD_SYMBOLS='true'
-            SENTRY_URL=https://sentry.dev.mu.se/api/4/minidump/?sentry_key=$SENTRY_MUSE_MU4_KEY
+            SENTRY_URL=https://sentry-mu.mu.se/api/4/minidump/?sentry_key=$SENTRY_MUSE_MU4_KEY
           fi
         fi
 
@@ -117,7 +117,7 @@ jobs:
 
         if [ "$SENTRY_PROJECT" == "mu4-sandbox" ] && [ "$SENTRY_MUSE_MU4_SANDBOX_KEY" != "" ]; then
           DO_UPLOAD_SYMBOLS='true'
-          SENTRY_URL=https://sentry.dev.mu.se/api/5/minidump/?sentry_key=$SENTRY_MUSE_MU4_SANDBOX_KEY
+          SENTRY_URL=https://sentry-mu.mu.se/api/3/minidump/?sentry_key=$SENTRY_MUSE_MU4_SANDBOX_KEY
         fi
 
         DO_PUBLISH='false'
@@ -213,8 +213,8 @@ jobs:
         cmake -DAPP_BIN=${APP_BIN} \
               -DGENERATE_ARCHS="${GENERATE_ARCHS}" \
               -DBUILD_DIR=${BUILD_DIR} \
-              -DSENTRY_URL=https://sentry.dev.mu.se \
-              -DSENTRY_ORG=sentry \
+              -DSENTRY_URL=https://sentry-mu.mu.se \
+              -DSENTRY_ORG=Sentry \
               -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_MUSE_AUTH_TOKEN }} \
               -DSENTRY_PROJECT=${SENTRY_PROJECT} \
               -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
