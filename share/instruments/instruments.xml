@@ -9443,7 +9443,29 @@
                         <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
                         <program value="0"/> <!--Standard Kit-->
+                  </Instrument>
                   </Channel>
+                        <Instrument id="tsymbaly">
+                  <family>keyboard-percussion</family>
+                  <trackName>Tsymbaly</trackName>
+                  <longName>Tsymbaly</longName>
+                  <shortName>Tsym.</shortName>
+                  <description>Ukrainian hammered dulcimer.</description>
+                  <musicXMLid>pitched-percussion.dulcimer</musicXMLid>
+                  <staves>2</staves>
+                  <clef>G</clef>
+                  <bracket>1</bracket>
+                  <bracketSpan>2</bracketSpan>
+                  <barlineSpan>2</barlineSpan>
+                  <clef staff="2">F</clef>
+                  <aPitchRange>40-88</aPitchRange>
+                  <pPitchRange>40-93</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 15; MS General: Dulcimer-->
+                        <program value="15"/> <!--Dulcimer-->
+                  </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="sleigh-bells">
                   <family>unpitched-metal-percussion</family>
@@ -9864,6 +9886,41 @@
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="bukhaylo">
+                  <family>drums</family>
+                  <trackName>Bukhaylo</trackName>
+                  <longName>Bukhaylo</longName>
+                  <shortName>Bkh.</shortName>
+                  <description>Ukrainian bass drum with a cymbal mounted on top.</description>
+                  <musicXMLid>drum.bass-drum</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="36"> <!-- Acoustic Bass Drum -->
+                        <head>normal</head>
+                        <line>7</line>
+                        <voice>1</voice>
+                        <name>Bukhaĭlo (drum)</name>
+                        <stem>2</stem>
+                        <shortcut>A</shortcut>
+                  </Drum>
+                  <Drum pitch="57"> <!-- Crash Cymbal 2 -->
+                        <head>cross</head>
+                        <line>-2</line>
+                        <voice>0</voice>
+                        <name>Bukhaĭlo (cymbal)</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="log-drum">
                   <family>unpitched-wooden-percussion</family>
