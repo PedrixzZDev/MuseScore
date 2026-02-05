@@ -75,6 +75,8 @@ public:
 
     bool isMetronomeEnabled() const;
     void setIsMetronomeEnabled(const bool isEnabled);
+    bool isExpressivePlaybackEnabled() const;
+    void setExpressivePlaybackEnabled(bool enabled);
 
     const InstrumentTrackId& metronomeTrackId() const;
     InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
@@ -84,6 +86,7 @@ public:
 
     muse::mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     muse::mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
+    muse::mpe::PlaybackData expressivePlaybackData(const InstrumentTrackId& trackId) const;
 
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound);
     void triggerMetronome(int tick);
@@ -166,6 +169,7 @@ private:
     bool m_playChordSymbols = true;
     bool m_useScoreDynamicsForOffstreamPlayback = true;
     bool m_metronomeEnabled = true;
+    bool m_expressivePlaybackEnabled = false;
 
     PlaybackEventsRenderer m_renderer;
     PlaybackSetupDataResolver m_setupResolver;

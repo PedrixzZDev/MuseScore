@@ -22,6 +22,9 @@
 
 #include "playbackmodel.h"
 
+#include <algorithm>
+#include <cstdint>
+#include <cstdlib>
 #include <limits>
 
 #include "dom/fret.h"
@@ -45,6 +48,106 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace muse::mpe;
 using namespace muse::async;
+
+namespace {
+constexpr timestamp_t TIMING_JITTER_USEC = 6000;
+constexpr timestamp_t CHORD_SPREAD_USEC = 4000;
+constexpr dynamic_level_t DYNAMIC_JITTER = 2 * ONE_PERCENT;
+constexpr float VELOCITY_JITTER = 0.02f;
+
+uint32_t mixSeed(uint32_t value)
+{
+    value ^= value >> 16;
+    value *= 0x7feb352d;
+    value ^= value >> 15;
+    value *= 0x846ca68b;
+    value ^= value >> 16;
+    return value;
+}
+
+uint32_t hashCombine(uint32_t seed, uint32_t value)
+{
+    return mixSeed(seed ^ (value + 0x9e3779b9 + (seed << 6) + (seed >> 2)));
+}
+
+float normalizedJitter(uint32_t seed)
+{
+    return (static_cast<float>(seed) / static_cast<float>(std::numeric_limits<uint32_t>::max())) * 2.0f - 1.0f;
+}
+
+timestamp_t clampTimestamp(timestamp_t value)
+{
+    return std::max<timestamp_t>(0, value);
+}
+
+dynamic_level_t clampDynamic(dynamic_level_t value)
+{
+    return std::clamp(value, MIN_DYNAMIC_LEVEL, MAX_DYNAMIC_LEVEL);
+}
+
+NoteEvent humanizeNoteEvent(const NoteEvent& note, timestamp_t& adjustedTimestamp)
+{
+    const ArrangementContext& arrangement = note.arrangementCtx();
+    const PitchContext& pitch = note.pitchCtx();
+    const ExpressionContext& expression = note.expressionCtx();
+
+    const uint64_t timestampValue = static_cast<uint64_t>(arrangement.nominalTimestamp);
+    uint32_t seed = hashCombine(0u, static_cast<uint32_t>(timestampValue));
+    seed = hashCombine(seed, static_cast<uint32_t>(timestampValue >> 32));
+    seed = hashCombine(seed, static_cast<uint32_t>(pitch.nominalPitchLevel));
+    seed = hashCombine(seed, static_cast<uint32_t>(arrangement.voiceLayerIndex));
+    seed = hashCombine(seed, static_cast<uint32_t>(arrangement.staffLayerIndex));
+
+    const float timingJitter = normalizedJitter(seed);
+    const float dynamicJitter = normalizedJitter(mixSeed(seed + 1u));
+
+    const int pitchBucket = std::abs(static_cast<int>(pitch.nominalPitchLevel)) % 7;
+    const float pitchSpread = (static_cast<float>(pitchBucket) - 3.0f) / 3.0f;
+
+    const timestamp_t timingOffset = static_cast<timestamp_t>(timingJitter * TIMING_JITTER_USEC)
+                                     + static_cast<timestamp_t>(pitchSpread * CHORD_SPREAD_USEC);
+
+    adjustedTimestamp = clampTimestamp(arrangement.nominalTimestamp + timingOffset);
+
+    dynamic_level_t adjustedDynamic = clampDynamic(expression.nominalDynamicLevel
+                                                   + static_cast<dynamic_level_t>(dynamicJitter * DYNAMIC_JITTER));
+
+    float velocityOverride = expression.velocityOverride.value_or(0.f);
+    if (expression.velocityOverride.has_value()) {
+        velocityOverride = std::clamp(velocityOverride + (dynamicJitter * VELOCITY_JITTER), 0.01f, 1.f);
+    }
+
+    return NoteEvent(adjustedTimestamp,
+                     arrangement.nominalDuration,
+                     arrangement.voiceLayerIndex,
+                     arrangement.staffLayerIndex,
+                     pitch.nominalPitchLevel,
+                     adjustedDynamic,
+                     expression.articulations,
+                     arrangement.bps,
+                     velocityOverride,
+                     pitch.pitchCurve);
+}
+
+PlaybackEventsMap humanizePlaybackEvents(const PlaybackEventsMap& events)
+{
+    PlaybackEventsMap result;
+
+    for (const auto& [timestamp, list] : events) {
+        for (const PlaybackEvent& event : list) {
+            if (const NoteEvent* note = std::get_if<NoteEvent>(&event)) {
+                timestamp_t adjustedTimestamp = timestamp;
+                NoteEvent humanized = humanizeNoteEvent(*note, adjustedTimestamp);
+                result[adjustedTimestamp].emplace_back(std::move(humanized));
+            } else {
+                result[timestamp].push_back(event);
+            }
+        }
+    }
+
+    return result;
+}
+}
 
 static const String METRONOME_INSTRUMENT_ID(u"metronome");
 static const String CHORD_SYMBOLS_INSTRUMENT_ID(u"chord_symbols");
@@ -137,7 +240,11 @@ void PlaybackModel::reload()
     trackIdSet.reserve(m_playbackDataMap.size());
 
     for (auto& pair : m_playbackDataMap) {
-        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamics);
+        if (m_expressivePlaybackEnabled && pair.first != METRONOME_TRACK_ID) {
+            pair.second.mainStream.send(humanizePlaybackEvents(pair.second.originEvents), pair.second.dynamics);
+        } else {
+            pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamics);
+        }
         trackIdSet.insert(pair.first);
     }
 
@@ -223,6 +330,25 @@ void PlaybackModel::setIsMetronomeEnabled(const bool isEnabled)
     reloadMetronomeEvents();
 }
 
+bool PlaybackModel::isExpressivePlaybackEnabled() const
+{
+    return m_expressivePlaybackEnabled;
+}
+
+void PlaybackModel::setExpressivePlaybackEnabled(bool enabled)
+{
+    enabled = true;
+    if (m_expressivePlaybackEnabled == enabled) {
+        return;
+    }
+
+    m_expressivePlaybackEnabled = enabled;
+
+    if (m_score) {
+        reload();
+    }
+}
+
 const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
 {
     return METRONOME_TRACK_ID;
@@ -272,6 +398,23 @@ PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& t
 PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const String& instrumentId)
 {
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
+}
+
+PlaybackData PlaybackModel::expressivePlaybackData(const InstrumentTrackId& trackId) const
+{
+    auto search = m_playbackDataMap.find(trackId);
+
+    if (search == m_playbackDataMap.cend()) {
+        return {};
+    }
+
+    PlaybackData result = search->second;
+
+    if (m_expressivePlaybackEnabled && trackId != METRONOME_TRACK_ID) {
+        result.originEvents = humanizePlaybackEvents(result.originEvents);
+    }
+
+    return result;
 }
 
 void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound)
@@ -950,7 +1093,11 @@ void PlaybackModel::sendEvents(const InstrumentTrackId& trackId)
     }
 
     PlaybackData& data = it->second;
-    data.mainStream.send(data.originEvents, data.dynamics);
+    if (m_expressivePlaybackEnabled && trackId != METRONOME_TRACK_ID) {
+        data.mainStream.send(humanizePlaybackEvents(data.originEvents), data.dynamics);
+    } else {
+        data.mainStream.send(data.originEvents, data.dynamics);
+    }
 }
 
 void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom,

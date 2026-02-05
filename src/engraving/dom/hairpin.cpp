@@ -522,7 +522,7 @@ Hairpin::Hairpin(EngravingItem* parent)
     m_hairpinCircledTip     = false;
     m_veloChange            = 0;
     m_singleNoteDynamics    = true;
-    m_veloChangeMethod      = ChangeMethod::NORMAL;
+    m_veloChangeMethod      = ChangeMethod::EASE_IN_OUT;
 }
 
 DynamicType Hairpin::dynamicTypeFrom() const

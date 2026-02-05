@@ -78,5 +78,6 @@ public:
     void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) override;
     void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
     bool hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
+    void setExpressivePlaybackEnabled(bool enabled) override;
 };
 }

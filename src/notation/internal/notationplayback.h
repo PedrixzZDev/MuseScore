@@ -22,6 +22,8 @@
 #ifndef MU_NOTATION_NOTATIONPLAYBACK_H
 #define MU_NOTATION_NOTATIONPLAYBACK_H
 
+#include <unordered_map>
+
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "engraving/playback/playbackmodel.h"
@@ -91,6 +93,7 @@ public:
     void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) override;
     void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
     bool hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
+    void setExpressivePlaybackEnabled(bool enabled) override;
 
 private:
     engraving::Score* score() const;
@@ -116,6 +119,9 @@ private:
     muse::async::Channel<muse::audio::secs_t> m_totalPlayTimeChanged;
 
     mutable Tempo m_currentTempo;
+
+    bool m_expressivePlaybackEnabled = false;
+    mutable std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_expressivePlaybackCache;
 
     mutable engraving::PlaybackModel m_playbackModel;
 };

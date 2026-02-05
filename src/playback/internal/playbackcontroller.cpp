@@ -1433,6 +1433,8 @@ void PlaybackController::setupSequenceTracks()
     size_t trackCount = trackIdSet.size() + AUX_CHANNEL_NUM;
     std::string title = muse::trc("playback", "Loading audio samples");
 
+    notationPlayback()->setExpressivePlaybackEnabled(true);
+
     auto onAddFinished = [this, trackCount, title]() {
         m_loadingTrackCount--;
 
@@ -1690,6 +1692,8 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     if (!profile.isValid()) {
         return;
     }
+
+    notationPlayback()->setExpressivePlaybackEnabled(true);
 
     notationPlayback()->removeSoundFlags(notationPlayback()->existingTrackIdSet());
 

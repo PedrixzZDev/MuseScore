@@ -202,3 +202,7 @@ bool NotationPlaybackStub::hasSoundFlags(const engraving::InstrumentTrackIdSet&)
 {
     return false;
 }
+
+void NotationPlaybackStub::setExpressivePlaybackEnabled(bool)
+{
+}
