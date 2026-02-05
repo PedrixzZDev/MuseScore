@@ -83,6 +83,7 @@ void NotationPlayback::init()
 
     updateTotalPlayTime();
     m_playbackModel.tracksDataChanged().onReceive(this, [this](const InstrumentTrackIdSet&) {
+        m_expressivePlaybackCache.clear();
         updateTotalPlayTime();
     });
 
@@ -158,6 +159,11 @@ bool NotationPlayback::isChordSymbolsTrack(const engraving::InstrumentTrackId& t
 
 const muse::mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const
 {
+    if (m_expressivePlaybackEnabled) {
+        m_expressivePlaybackCache[trackId] = m_playbackModel.expressivePlaybackData(trackId);
+        return m_expressivePlaybackCache.at(trackId);
+    }
+
     return m_playbackModel.resolveTrackPlaybackData(trackId);
 }
 
@@ -535,6 +541,18 @@ bool NotationPlayback::hasSoundFlags(const engraving::InstrumentTrackIdSet& trac
     }
 
     return false;
+}
+
+void NotationPlayback::setExpressivePlaybackEnabled(bool enabled)
+{
+    enabled = true;
+    if (m_expressivePlaybackEnabled == enabled) {
+        return;
+    }
+
+    m_expressivePlaybackEnabled = enabled;
+    m_expressivePlaybackCache.clear();
+    m_playbackModel.setExpressivePlaybackEnabled(enabled);
 }
 
 std::vector<StaffText*> NotationPlayback::collectStaffText(const InstrumentTrackIdSet& trackIdSet, bool withSoundFlags) const

@@ -416,7 +416,7 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
         std::map<int, int> dynamicsCurve = TConv::easingValueCurve(transitionDuration,
                                                                    6 /*stepsCount*/,
                                                                    static_cast<int>(range),
-                                                                   ChangeMethod::NORMAL);
+                                                                   ChangeMethod::EASE_IN_OUT);
 
         for (const auto& pair : dynamicsCurve) {
             applyDynamic(dynamic, levelFrom + pair.second, segmentPositionTick + pair.first);

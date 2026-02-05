@@ -92,6 +92,8 @@ public:
     virtual void addSoundFlags(const std::vector<mu::engraving::StaffText*>& staffTextList) = 0;
     virtual void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
     virtual bool hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
+
+    virtual void setExpressivePlaybackEnabled(bool enabled) = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;
